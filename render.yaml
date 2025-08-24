@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: allinonedownloader
+    env: docker
+    repo: https://github.com/neohackt/allinonedownloader.git
+    branch: main
