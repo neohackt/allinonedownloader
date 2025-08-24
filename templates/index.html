@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <title>VibeDL – Instant Gen-Z Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/genz.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div id="bg"></div>
+  <header>
+    <h1><span class="glitch">VibeDL</span> 🔥</h1>
+    <button id="toggleTheme" aria-label="Toggle theme">🌗</button>
+  </header>
+
+  <main class="glass">
+    <form id="downloadForm">
+      <label>
+        <span>Paste link here ✨</span>
+        <input type="url" name="url" placeholder="https://..." required autofocus>
+      </label>
+
+      <label>
+        <span>What you want?</span>
+        <select name="format">
+          <option value="bv+ba/best">Best Video (MP4)</option>
+          <option value="bestaudio/best">Audio Only (MP3)</option>
+          <option value="worst">Data Saver</option>
+        </select>
+      </label>
+
+      <button type="submit">Start Download 🍿</button>
+    </form>
+
+    <section id="progress" hidden>
+      <p id="status">Grabbing metadata...</p>
+      <div class="neon-bar"><div></div></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>made by Gen-Z for Gen-Z – no cap 🧢</small>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/sparkle.js') }}"></script>
+  <script>
+    // SSE-based progress
+    const form = document.getElementById('downloadForm');
+    const status = document.getElementById('status');
+    const bar = document.querySelector('.neon-bar > div');
+    const progress = document.getElementById('progress');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      progress.hidden = false;
+      status.textContent = 'Grabbing metadata...';
+      bar.style.width = '0%';
+
+      const data = { url: form.url.value, format: form.format.value };
+      const res = await fetch('/download', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+      const json = await res.json();
+      if (json.error) {
+        status.textContent = json.error;
+        return;
+      }
+      status.textContent = '✅ Done! Downloading...';
+      window.location = `/file/${json.file}`;
+      window.dispatchEvent(new Event('downloadDone'));
+    });
+  </script>
+</body>
+</html>
