@@ -1,3 +1,9 @@
-flask==2.3.3
-yt-dlp==2023.9.24
+# Core web framework
+Flask==2.3.3
 gunicorn==21.2.0
+
+# Latest yt-dlp nightly (fixes bot-detection & sign-in prompts)
+git+https://github.com/yt-dlp/yt-dlp.git@master
+
+# Optional helpers (keep if you already installed)
+ffmpeg-python==0.2.0
