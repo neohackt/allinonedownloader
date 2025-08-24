@@ -2,9 +2,5 @@
 Flask==2.3.3
 gunicorn==21.2.0
 
-# Nightly yt-dlp (bypasses sign-in wall)
+# Nightly yt-dlp (fixes sign-in & bot-detection)
 git+https://github.com/yt-dlp/yt-dlp.git@master
-
-# Optional helpers (keep if you already installed)
-ffmpeg-python==0.2.0
-
