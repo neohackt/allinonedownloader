@@ -13,11 +13,11 @@ os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 # ------------------------------------------------------------------------------
 # Helpers
 # ------------------------------------------------------------------------------
-def run_yt_dlp(args):
-    """Run yt-dlp and return (stdout, stderr). Raise on non-zero exit."""
+def run_yt_dlp(cmd_list):
+    """Run yt-dlp with mweb client (bypasses 429 / sign-in)."""
     try:
         proc = subprocess.run(
-            args,
+            cmd_list,
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -40,9 +40,15 @@ def info():
     if not url:
         return jsonify({"error": "Missing URL"}), 400
 
+    cmd = [
+        "yt-dlp",
+        "--dump-json",
+        "--no-playlist",
+        "--extractor-args", "youtube:player_client=mweb",
+        url,
+    ]
     try:
-        stdout, _ = run_yt_dlp(["yt-dlp", "--dump-json", "--no-playlist", url])
-        # first JSON line
+        stdout, _ = run_yt_dlp(cmd)
         data = stdout.splitlines()[0]
         return jsonify(eval(data))
     except RuntimeError as e:
@@ -58,14 +64,16 @@ def download():
     uid = uuid.uuid4().hex
     out_template = f"{DOWNLOAD_DIR}/{uid}.%(ext)s"
 
+    cmd = [
+        "yt-dlp",
+        "-f", fmt,
+        "-o", out_template,
+        "--no-playlist",
+        "--extractor-args", "youtube:player_client=mweb",
+        url,
+    ]
     try:
-        run_yt_dlp([
-            "yt-dlp",
-            "-f", fmt,
-            "-o", out_template,
-            "--no-playlist",
-            url,
-        ])
+        run_yt_dlp(cmd)
         file = next(f for f in os.listdir(DOWNLOAD_DIR) if f.startswith(uid))
         return jsonify({"file": file})
     except RuntimeError as e:
