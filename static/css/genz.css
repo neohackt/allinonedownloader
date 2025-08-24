@@ -1,0 +1,123 @@
+:root {
+  --pink: #ff006e;
+  --cyan: #00f5ff;
+  --lime: #39ff14;
+  --bg: #0d0d0d;
+  --glass: rgba(255 255 255 / 6%);
+  --border: rgba(255 255 255 / 12%);
+  font-family: 'Poppins', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: #fff;
+}
+#bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(-45deg, var(--pink), var(--cyan), var(--lime));
+  background-size: 400% 400%;
+  animation: shift 15s ease infinite;
+}
+@keyframes shift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+header {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+}
+h1 .glitch {
+  font-family: 'VT323', monospace;
+  font-size: 2.4rem;
+  color: var(--pink);
+  position: relative;
+}
+.glitch::before, .glitch::after {
+  content: 'VibeDL';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  overflow: hidden;
+}
+.glitch::before { left: 2px; text-shadow: -2px 0 var(--lime); animation: glitch-1 .4s infinite alternate-reverse; }
+.glitch::after  { left: -2px; text-shadow: -2px 0 var(--cyan); animation: glitch-2 .4s infinite alternate-reverse; }
+@keyframes glitch-1 { clip-path: inset(10% 0 70% 0); }
+@keyframes glitch-2 { clip-path: inset(80% 0 5% 0); }
+button#toggleTheme {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: transform .2s;
+}
+button#toggleTheme:hover { transform: scale(1.2); }
+main.glass {
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 8px 32px rgba(0 0 0 / 37%);
+  transition: transform .3s ease;
+}
+main.glass:hover { transform: translateY(-4px) rotate(1deg); }
+form label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+input, select {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0 0 0 / 40%);
+  color: #fff;
+}
+button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--pink), var(--cyan));
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+button[type="submit"]:hover { opacity: .9; }
+#progress { margin-top: 20px; }
+.neon-bar {
+  height: 6px;
+  border-radius: 6px;
+  background: #222;
+  overflow: hidden;
+}
+.neon-bar > div {
+  height: 100%;
+  width: 0%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+  transition: width .3s;
+}
+footer {
+  position: absolute;
+  bottom: 10px;
+  font-size: .8rem;
+  color: #888;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; }
+}
